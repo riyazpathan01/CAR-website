@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoVault | Performance Cars (3D Animated)</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:Arial,sans-serif;background:#f4f5f3;color:#171917;overflow-x:hidden}
+:root{--green:#1f7a4d;--darkgreen:#145436;--gray:#68706b;--dark:#151816;--border:#d9dedb}
+header{position:fixed;top:0;left:0;width:100%;height:74px;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:0 7%;background:rgba(255,255,255,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.logo{font-size:22px;font-weight:900;letter-spacing:3px}.logo span{color:var(--green)}
+nav{display:flex;gap:32px}nav a{text-decoration:none;color:#555;font-size:12px;font-weight:bold;letter-spacing:1.5px}nav a:hover{color:var(--green)}
+.menu{display:none;background:none;border:0;font-size:25px}
+.hero{min-height:100vh;padding:105px 7% 55px;display:grid;grid-template-columns:42% 58%;align-items:center;background:radial-gradient(circle at 85% 45%,rgba(31,122,77,.13),transparent 34%),#f4f5f3}
+.small{color:var(--green);font-size:11px;font-weight:bold;letter-spacing:4px;margin-bottom:20px}
+h1{font-size:clamp(52px,7vw,100px);line-height:.88;letter-spacing:-5px}h1 span{color:var(--green)}
+.hero p{max-width:470px;margin:27px 0;color:#707772;line-height:1.7}
+.buttons{display:flex;gap:12px}.btn{display:inline-block;padding:15px 21px;text-decoration:none;font-size:10px;font-weight:bold;letter-spacing:1.5px}.green{background:var(--green);color:#fff}.outline{border:1px solid #aeb8b1;color:#333}
+
+/* Hero Image 3D Effect */
+.hero-image{position:relative;display:flex;align-items:center;justify-content:center;min-height:590px; perspective: 1000px;}
+.hero-image:before{content:"BMW";position:absolute;font-size:clamp(110px,18vw,250px);font-weight:900;color:rgba(31,122,77,.055); transform: translateZ(-50px);}
+.hero-image img{position:relative;width:min(92%,650px);max-height:650px;object-fit:cover;border-radius:10px;box-shadow:0 30px 70px rgba(0,0,0,.2);transition: 0.5s transform; animation: heroFloat 8s infinite ease-in-out;}
+@keyframes heroFloat {
+    0%, 100% { transform: translateY(0) rotateY(0deg) translateZ(0); }
+    50% { transform: translateY(-15px) rotateY(-5deg) translateZ(20px); }
+}
+
+.strip{padding:23px 7%;display:flex;justify-content:space-between;background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border);color:#7d8580;font-size:11px;font-weight:bold;letter-spacing:3px}
+.collection{padding:110px 7%;background:#fff}.heading{display:flex;justify-content:space-between;align-items:end;margin-bottom:50px}.heading p{color:var(--green);font-size:11px;font-weight:bold;letter-spacing:4px;margin-bottom:10px}.heading h2{font-size:clamp(38px,5vw,72px);line-height:.94}.side{max-width:310px;color:#77807a;font-size:13px;line-height:1.6}
+
+/* 3D Grid & Card System */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:40px; perspective: 1200px;}
+
+.card{
+    background:#f5f6f5;
+    border:1px solid var(--border);
+    border-radius:12px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.1s;
+    animation: float3d 6s ease-in-out infinite;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+@keyframes float3d {
+    0%, 100% { transform: perspective(1000px) translateY(0) rotateX(1deg) rotateY(-1deg); }
+    50% { transform: perspective(1000px) translateY(-10px) rotateX(-1deg) rotateY(1deg); box-shadow: 0 25px 40px rgba(0,0,0,0.1); }
+}
+
+/* 3D Elements inside the card */
+.photo{
+    height:420px; 
+    background:#ddd; 
+    border-radius:12px 12px 0 0; 
+    overflow:hidden;
+    transform: translateZ(40px); /* Pops the image out */
+    box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+}
+.photo img{width:100%;height:100%;object-fit:cover;transition:.6s ease-out;}
+.card:hover .photo img{transform:scale(1.1) translateZ(20px);}
+
+.content{
+    padding:30px; 
+    transform: translateZ(60px); /* Pops the text even further out */
+    background: #f5f6f5;
+    border-radius: 0 0 12px 12px;
+    transform-style: preserve-3d;
+}
+.number{color:var(--green);font-size:11px;font-weight:bold;letter-spacing:2px; transform: translateZ(10px);}
+.content h3{font-size:28px;margin:12px 0; transform: translateZ(20px); text-shadow: 0 5px 10px rgba(0,0,0,0.1);}
+.content p{color:#737b76;font-size:14px;line-height:1.65; transform: translateZ(15px);}
+
+.bottom{margin-top:22px;padding-top:18px;border-top:1px solid #e1e6e3;display:flex;justify-content:space-between;align-items:center; transform: translateZ(25px);}
+.specs{display:flex;gap:22px}.spec strong{display:block;font-size:15px; color:#171917;}.spec span{font-size:10px;color:#858d88;letter-spacing:1px}
+.view{padding:12px 16px;border:1px solid var(--green);background:var(--green);color:#fff;font-size:10px;font-weight:bold; border-radius:4px; cursor:pointer; transition:0.3s;}
+.card:hover .view{background:#fff; color:var(--green); box-shadow: 0 8px 15px rgba(31,122,77,0.2);}
+
+/* Feature Card (Spans across) */
+.feature{grid-column:span 2;display:grid;grid-template-columns:58% 42%;background:#17201b;color:#fff;}
+.feature .photo{height:540px; border-radius: 12px 0 0 12px;}
+.feature .content{padding:50px;display:flex;flex-direction:column;justify-content:center; background:#17201b; border-radius: 0 12px 12px 0;}
+.feature .number{color:#75c796}
+.feature .content p{color:#aeb8b2}
+.feature .bottom{border-color:#33423a}
+.feature .spec strong{color: #fff;}
+.feature .spec span{color:#93a098}
+.feature .view{color:#17201b; background:#75c796; border-color:#75c796}
+.feature:hover .view{background:transparent; color:#75c796;}
+
+.about{padding:110px 7%;min-height:480px;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;background:linear-gradient(135deg,#edf3ef,#fff)}.about h2{font-size:clamp(43px,6vw,78px);line-height:.94}.about h2 span{color:var(--green)}.about-text{max-width:500px;color:#68716c;line-height:1.85}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}.stat{padding:18px;background:#fff;border:1px solid var(--border);border-radius:6px}.stat strong{display:block;color:var(--green);font-size:25px}.stat span{font-size:9px;color:#7d8580}
+.cta{margin:65px 7%;padding:55px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(120deg,#1b6e46,#2f8b5c);color:#fff; transform-style: preserve-3d; perspective:1000px; animation: heroFloat 10s infinite reverse ease-in-out; box-shadow: 0 20px 50px rgba(31,122,77,0.3);}.cta h2{font-size:clamp(34px,5vw,62px);line-height:.95; transform: translateZ(30px);}.cta p{margin-top:12px;color:#d7eadf; transform: translateZ(20px);}.cta .btn{background:#fff;color:var(--green); transform: translateZ(40px);}
+footer{padding:45px 7%;background:#151816;color:#fff;display:flex;justify-content:space-between}footer p{color:#858e89;font-size:11px}
+
+@media(max-width:900px){nav{display:none}.menu{display:block}.hero{grid-template-columns:1fr;text-align:center}.hero p{margin-left:auto;margin-right:auto}.buttons{justify-content:center}.hero-image{min-height:440px}.strip{flex-wrap:wrap;justify-content:center;gap:20px}.heading{display:block}.side{margin-top:18px}.grid{grid-template-columns:1fr}.feature{grid-column:span 1;grid-template-columns:1fr}.feature .photo{height:400px; border-radius: 12px 12px 0 0;}.feature .content{padding:30px; border-radius: 0 0 12px 12px;}.about{grid-template-columns:1fr}.cta{flex-direction:column;align-items:flex-start;gap:28px}}
+@media(max-width:600px){.hero h1{font-size:52px;letter-spacing:-3px}.hero-image{min-height:350px}.hero-image img{width:100%}.photo{height:320px}.stats{grid-template-columns:1fr}.cta{margin:40px 5%;padding:34px}footer{flex-direction:column;gap:18px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AUTO<span>VAULT</span></div>
+  <nav>
+    <a href="#home">HOME</a>
+    <a href="#collection">COLLECTION</a>
+    <a href="#about">ABOUT</a>
+    <a href="#contact">CONTACT</a>
+  </nav>
+  <button class="menu">☰</button>
+</header>
+
+<section class="hero" id="home">
+  <div>
+    <div class="small">PREMIUM AUTOMOTIVE</div>
+    <h1>DRIVE<br><span>DIFFERENT.</span></h1>
+    <p>Explore a 3D interactive collection of performance icons, legendary machines and modern automotive design.</p>
+    <div class="buttons">
+      <a class="btn green" href="#collection">EXPLORE COLLECTION</a>
+      <a class="btn outline" href="#about">OUR STORY</a>
+    </div>
+  </div>
+  <div class="hero-image">
+    <img src="bm1.jpg" alt="BMW Performance Car">
+  </div>
+</section>
+
+<div class="strip">
+  <span>BMW</span><span>DODGE</span><span>PORSCHE</span><span>PERFORMANCE</span><span>PRECISION</span>
+</div>
+
+<section class="collection" id="collection">
+  <div class="heading">
+    <div><p>THE 3D COLLECTION</p><h2>ICONIC<br>MACHINES.</h2></div>
+    <div class="side">Hover over the cars to experience realistic 3D animations and engineered precision. All details beautifully rendered.</div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Car 1 -->
+    <article class="card">
+      <div class="photo"><img src="bm1.jpg" alt="BMW M4"></div>
+      <div class="content">
+        <div class="number">01 / BMW</div>
+        <h3>BMW M4</h3>
+        <p>Aggressive design, precision engineering and a road presence built to stand out with advanced aerodynamics.</p>
+        <div class="bottom">
+            <div class="specs">
+                <div class="spec"><strong>M</strong><span>SERIES</span></div>
+                <div class="spec"><strong>503</strong><span>HP</span></div>
+                <div class="spec"><strong>3.8s</strong><span>0-60 MPH</span></div>
+            </div>
+            <button class="view">VIEW 3D →</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- Car 2 -->
+    <article class="card">
+      <div class="photo"><img src="bm2.jpg" alt="BMW Coupe"></div>
+      <div class="content">
+        <div class="number">02 / BMW</div>
+        <h3>BMW COUPE</h3>
+        <p>A clean performance aesthetic paired with a dramatic mountain-road setting and exceptional track handling.</p>
+        <div class="bottom">
+            <div class="specs">
+                <div class="spec"><strong>AWD</strong><span>DRIVE</span></div>
+                <div class="spec"><strong>382</strong><span>HP</span></div>
+                <div class="spec"><strong>I6</strong><span>TURBO</span></div>
+            </div>
+            <button class="view">VIEW 3D →</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- Car 3 (Feature) -->
+    <article class="card feature">
+      <div class="photo"><img src="bm3.jpg" alt="Dodge Challenger SRT Demon 170"></div>
+      <div class="content">
+        <div class="number">03 / DODGE</div>
+        <h3>CHALLENGER<br>SRT DEMON 170</h3>
+        <p>American muscle engineered for extreme straight-line performance. A true statement of raw power with unprecedented drag strip capabilities.</p>
+        <div class="bottom">
+            <div class="specs">
+                <div class="spec"><strong>1,025</strong><span>HP</span></div>
+                <div class="spec"><strong>1.66s</strong><span>0-60 MPH</span></div>
+                <div class="spec"><strong>V8</strong><span>SUPERCHARGED</span></div>
+            </div>
+            <button class="view">VIEW DETAILS →</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- Car 4 -->
+    <article class="card">
+      <div class="photo"><img src="bm4.jpg" alt="Dodge Hellcat"></div>
+      <div class="content">
+        <div class="number">04 / DODGE</div>
+        <h3>SRT HELLCAT</h3>
+        <p>Iconic American muscle with an aggressive silhouette, unmistakable presence, and legendary exhaust note.</p>
+        <div class="bottom">
+            <div class="specs">
+                <div class="spec"><strong>717</strong><span>HP</span></div>
+                <div class="spec"><strong>V8</strong><span>ENGINE</span></div>
+                <div class="spec"><strong>656</strong><span>LB-FT</span></div>
+            </div>
+            <button class="view">VIEW 3D →</button>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div>
+    <div class="small">ABOUT AUTOVAULT</div>
+    <h2>BUILT FOR<br><span>CAR LOVERS.</span></h2>
+  </div>
+  <div class="about-text">
+    <p>AutoVault is a visual showcase of exciting performance cars. From German engineering to American muscle, every machine tells its own story in full interactive 3D dimension.</p>
+    <div class="stats">
+      <div class="stat"><strong>04</strong><span>3D RENDERED CARS</span></div>
+      <div class="stat"><strong>02</strong><span>BRANDS</span></div>
+      <div class="stat"><strong>∞</strong><span>PASSION</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="cta">
+  <div><h2>FIND YOUR<br>DREAM MACHINE.</h2><p>Performance. Design. Character. Explored in 3D.</p></div>
+  <a class="btn" href="#collection">EXPLORE CARS →</a>
+</div>
+
+<footer id="contact">
+  <div class="logo">AUTO<span>VAULT</span></div>
+  <p>© 2026 AutoVault — Automotive Showcase</p>
+</footer>
+
+<!-- 3D Animation JavaScript -->
+<script>
+  const cards = document.querySelectorAll('.card');
+  
+  cards.forEach(card => {
+    // When mouse enters, stop the idle floating animation to prevent conflicts
+    card.addEventListener('mouseenter', () => {
+      card.style.animation = 'none';
+      card.style.transition = 'transform 0.1s ease-out';
+    });
+
+    // Track mouse movement to create the 3D tilt
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left; // x position within the element
+      const y = e.clientY - rect.top;  // y position within the element
+      
+      // Calculate rotation based on cursor position (max 18 degrees)
+      const xRot = ((y / rect.height) - 0.5) * -36; 
+      const yRot = ((x / rect.width) - 0.5) * 36;
+      
+      card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+
+    // When mouse leaves, reset the card and restart idle animation
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+      
+      // Restart the floating animation after the reset transition finishes
+      setTimeout(() => {
+          card.style.transition = 'transform 0.1s';
+          card.style.animation = 'float3d 6s ease-in-out infinite';
+      }, 600);
+    });
+  });
+</script>
+
+</body>
+</html>
